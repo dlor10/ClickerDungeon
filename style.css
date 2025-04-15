@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
+
+
+body{
+    padding: 0;
+    margin: 0;
+    min-width: 800px;
+    font-family: "Chewy", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(12px 1vh 16px);
+}
+
+#field{
+    background-color: #74c12c;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 800px;
+}
+
+#playerStats{
+    background-color: rgba(59, 59, 59, .8);
+    width: 20vw;
+    height: 20vh;
+    border: .2em solid black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 1.5em;
+    color: rgb(222, 222, 222);
+    padding: 1em;
+}
+
+#progress-container{
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    top: .5em;
+    font-size: 3em;
+    justify-content: center;
+    align-items: center;
+    color: rgb(222, 222, 222);
+}
+
+#gold-container{
+    display: flex;
+    position: absolute;
+    border: .2em solid black;
+    background-color: rgba(59, 59, 59, .8);
+    width: 30vw;
+    height: 10vh;
+    top: 0;
+    left: 65vw;
+    font-size: 3em;
+    column-gap: .5em;
+    justify-content: center;
+    align-items: center;
+    color: rgb(222, 222, 222);
+}
+
+#damage-messages-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.damage-message {
+    position: absolute;
+    top: 25vh;
+    left: 45vw;
+    font-size: 2.5em;
+    color: rgb(222, 222, 222);
+    animation: damageJump .3s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes damageJump{
+    0%{
+      transform: translate(0, 0);
+    }
+    25%{
+      transform: translate(2em, -4em);
+    }
+    50%{
+      transform: translate(3em, -5em);
+    }
+    75%{
+      transform: translate(4em, -4em);
+    }
+    100%{
+      transform: translate(5em, 0em);
+    }
+}
+
+#enemyContainer{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+}
+
+#enemy{
+    background-color: rgb(252, 0, 0);
+    width: 5em;
+    height: 5em;
+    flex-shrink: 0;
+    min-width: 7em;
+    max-width: 7em;
+}
+
+#enemyHealthPoints{
+    width: auto;
+    height: auto;
+    font-size: 2em;
+}
+
+#enemyHealthBar{
+    background-color: gray;
+    width: 20vw;
+    height: 3vh;
+    position: relative;
+    border: .2em solid rgb(222, 222, 222);
+    border-radius: .2em;
+    flex-shrink: 0;
+    min-width: 9em;
+    max-width: 10em;
+}
+
+#enemyCurrentHealth{
+    background-color: rgb(5, 200, 5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    flex-shrink: 0;
+}
+
+#notification{
+    position: absolute;
+    color: rgb(222, 222, 222);
+    bottom: 40vh;
+    font-size: 2.5em;
+    display: none;
+    pointer-events: none;
+}
+
+#menu-container{
+    background-color: #E9DCC9;
+    border-top: 1em solid #CD7F32;
+    width: 100%;
+    height: 28.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-shrink: 0;
+}
+
+.menus{
+    background-color: #0096FF;
+    border: .5em solid #CD7F32;
+    border-radius: 1em;
+    width: 30vw;
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    color: gold;
+}
+

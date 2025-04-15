@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Clicker Dungeon</title>
+        <link rel="stylesheet" href="style.css">
+        <script type="module" src="script.js" defer></script>
+    </head>
+    <body>
+        <!-- Field container -->
+        <div id="field">
+            <!-- Player stats box -->
+            <div id="playerStats">
+                <div id="attackPower"></div>
+            </div>
+            <!-- Container for progression -->
+            <div id="progress-container">
+                <div id="stage-level"></div>
+                <div id="enemies-defeated"></div>
+            </div>
+            <div id="gold-container">
+                <!-- <img id="gold-icon" src="" alt=""> -->
+                <div id="gold-amount"></div>
+            </div>
+            <!-- Enemy container and hit box -->
+            <div id="enemyContainer">
+                <div id="enemy"></div>
+                <div id="enemyHealthPoints"></div>
+                <div id="enemyHealthBar"><div id="enemyCurrentHealth"></div></div>
+                
+                <div id="damage-messages-container"></div>
+            </div>
+            <!-- Upgrade notifications -->
+            <div id="notification"></div>
+        </div>
+        <div id="menu-container">
+            <button id="upgrade-menu" class="menus">
+                <h1>UPGRADE<br><span id="upgrade-price"></span></h1>
+            </button>
+            <button id="reset-menu" class="menus">
+                <h1>RESET</h1>
+            </button>
+        </div>
+    </body>
+</html>
