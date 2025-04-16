@@ -9,6 +9,10 @@ body{
     font-weight: 400;
     font-style: normal;
     font-size: clamp(12px 1vh 16px);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #field{
@@ -63,60 +67,34 @@ body{
     color: rgb(222, 222, 222);
 }
 
-#damage-messages-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: visible;
-}
-
-.damage-message {
-    position: absolute;
-    top: 25vh;
-    left: 45vw;
-    font-size: 2.5em;
-    color: rgb(222, 222, 222);
-    animation: damageJump .3s ease forwards;
-    pointer-events: none;
-}
-
-@keyframes damageJump{
-    0%{
-      transform: translate(0, 0);
-    }
-    25%{
-      transform: translate(2em, -4em);
-    }
-    50%{
-      transform: translate(3em, -5em);
-    }
-    75%{
-      transform: translate(4em, -4em);
-    }
-    100%{
-      transform: translate(5em, 0em);
-    }
-}
-
 #enemyContainer{
+    margin-top: 25dvh;
     display: flex;
     flex-direction: column;
     row-gap: 1em;
+    align-items: center;
 }
 
 #enemy{
     background-color: rgb(252, 0, 0);
+    position: relative;
     width: 5em;
-    height: 5em;
+    height: 7em;
     flex-shrink: 0;
     min-width: 7em;
     max-width: 7em;
 }
 
+#enemy-image {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Let clicks pass through to #enemy */
+}
+
 #enemyHealthPoints{
+    text-align: center;
     width: auto;
     height: auto;
     font-size: 2em;
@@ -141,6 +119,44 @@ body{
     position: absolute;
     left: 0;
     flex-shrink: 0;
+}
+
+#damage-messages-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.damage-message {
+    position: absolute;
+    top: 30dvh;
+    left: 50dvw;
+    font-size: 2.5em;
+    color: rgb(222, 222, 222);
+    animation: damageJump .3s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes damageJump{
+    0%{
+      transform: translate(0, 0);
+    }
+    25%{
+      transform: translate(2em, -4em);
+    }
+    50%{
+      transform: translate(3em, -5em);
+    }
+    75%{
+      transform: translate(4em, -4em);
+    }
+    100%{
+      transform: translate(5em, 0em);
+    }
 }
 
 #notification{

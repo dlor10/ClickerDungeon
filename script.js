@@ -28,6 +28,9 @@ let enemiesDefeatedCount = 0;
 RENDER_ENEMIES_DEFEATED.innerHTML = "💀 " + enemiesDefeatedCount;
 
 const RENDER_STAGE_LEVEL = document.getElementById("stage-level");
+const DEFAULT_STAGE = 1;
+let stageLevel = DEFAULT_STAGE;
+RENDER_STAGE_LEVEL.innerHTML = stageLevel;
 
 // Increase rate of monster and gold per level
 let enemyLevelIncreaseRate = 1.50;
@@ -88,29 +91,42 @@ function handleEnemyHP() {
     RENDER_ENEMY_HP.innerHTML = enemy.currentHP + " HP";
 }
 
-function spawnNewEnemy() {
-      // Affects after defeating enemy
-    if (enemy.isDefeated()) {
-        
-        player.gold += enemy.goldDrop;
+const PORING_IDLE = "/assets/poring-idle.png";
+const PORING_IDLE_2 = "/assets/poring-idle2.png";
+const PORING_DAMAGED = "/assets/poring-damaged.png"
+let enemyIdleImage = PORING_IDLE;
+let enemyIdleImage2 = PORING_IDLE_2;
+let enemyDamagedImage = PORING_DAMAGED
+let enemyImage = document.getElementById("enemy-image");
 
-        // Level up enemy and gold drop
-        enemyMaxHealth = Math.round(enemyMaxHealth * enemyLevelIncreaseRate);
-        enemyGoldDrop = Math.round(enemyGoldDrop * goldDropIncreaseRate);
-        enemy = new GameObjects.Enemy(enemyMaxHealth, enemyGoldDrop);
-        enemyHealthPercent = (enemy.currentHP / enemy.maxHealth) * 100;
-        
-        enemiesDefeatedCount += 1;
-        
-        // Update values displayed
-        RENDER_PLAYER_GOLD.innerHTML = "🪙 " + player.gold;
-        RENDER_ENEMIES_DEFEATED.innerHTML = "💀 " + enemiesDefeatedCount;
-        RENDER_ENEMY_HP.innerHTML = enemy.currentHP + " HP";
-        
-        // Reset health bar visually
-        ENEMY_CURRENT_HEALTH.style.backgroundColor = "rgb(5, 200, 5)";
-        ENEMY_CURRENT_HEALTH.style.width = enemyHealthPercent + "%";
-    }
+function defeatEnemy() {
+    player.gold += enemy.goldDrop;
+    // Level up enemy and gold drop
+    enemyMaxHealth = Math.round(enemyMaxHealth * enemyLevelIncreaseRate);
+    enemyGoldDrop = Math.round(enemyGoldDrop * goldDropIncreaseRate);
+    enemy = new GameObjects.Enemy(enemyMaxHealth, enemyGoldDrop);
+    enemyHealthPercent = (enemy.currentHP / enemy.maxHealth) * 100;
+    enemiesDefeatedCount += 1;
+    // Update values displayed
+    RENDER_PLAYER_GOLD.innerHTML = "🪙 " + player.gold;
+    RENDER_ENEMIES_DEFEATED.innerHTML = "💀 " + enemiesDefeatedCount;
+    RENDER_ENEMY_HP.innerHTML = enemy.currentHP + " HP";
+    // Reset health bar visually
+    ENEMY_CURRENT_HEALTH.style.backgroundColor = "rgb(5, 200, 5)";
+    ENEMY_CURRENT_HEALTH.style.width = enemyHealthPercent + "%";
+}
+
+function spawnNewEnemy(image) {
+    // Spawn new enemy
+    enemyImage.src = image;
+}
+
+
+function enemyTakeDamage(image) {
+    enemyImage.src = image;
+    setTimeout(() => {
+        enemyImage.src = PORING_IDLE;
+    }, 400);
 }
 
 // Upgrade Player attack
@@ -187,13 +203,19 @@ function showDamageNotification(message) {
 }
 
 // Attacking enemy function
-function attackEnemy(){
+function attackEnemy() {
     enemy.takeDamage(player.attackPower);
     showDamageNotification(player.attackPower)
     handleEnemyHP();
-    spawnNewEnemy();
+
+    if (enemy.isDefeated()) {
+        defeatEnemy();
+        spawnNewEnemy(enemyIdleImage2);
+    }
+    enemyTakeDamage(enemyDamagedImage);
 }
 
+spawnNewEnemy(enemyIdleImage);
 
 // ----------------- Event Listeners ----------------------------------------------
 // Click function to attack enemy
