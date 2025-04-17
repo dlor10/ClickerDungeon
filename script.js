@@ -7,25 +7,25 @@ const ENEMY_CURRENT_HEALTH = document.getElementById("enemyCurrentHealth");
 const RENDER_ENEMY_HP = document.getElementById("enemyHealthPoints");
 
 // Enemy HP default value
-const ENEMY_DEFAULT_HEALTH = 100;
+const ENEMY_DEFAULT_HEALTH = 200;
 let enemyMaxHealth = ENEMY_DEFAULT_HEALTH;
 let enemy;
 let enemyHealthPercent;
 // Enemy gold drop default
-const ENEMY_GOLD_DROP_DEFAULT = 10;
+const ENEMY_GOLD_DROP_DEFAULT = 100;
 let enemyGoldDrop = ENEMY_GOLD_DROP_DEFAULT;
 // Increase rate of monster and gold per level
-const ENEMY_LEVEL_RATE = 1.40;
-const ENEMY_GOLD_DROP_INCREASE_RATE = 1.20;
+const ENEMY_LEVEL_RATE = 1.35;
+const ENEMY_GOLD_DROP_INCREASE_RATE = 1.15;
 
 // Boss HP default value
 const BOSS_ENEMY_DEFAULT_HEALTH = 10000;
 let bossEnemyMaxHealth = BOSS_ENEMY_DEFAULT_HEALTH;
 // Boss gold drop default
-const BOSS_GOLD_DROP_DEFAULT = 1000;
+const BOSS_GOLD_DROP_DEFAULT = 500;
 let bossEnemyGoldDrop = BOSS_GOLD_DROP_DEFAULT;
-const BOSS_LEVEL_RATE = 40;
-const BOSS_GOLD_DROP_INCREASE_RATE = 20;
+const BOSS_LEVEL_RATE = 20;
+const BOSS_GOLD_DROP_INCREASE_RATE = 1.5;
 
 // Display progression
 const RENDER_ENEMIES_DEFEATED = document.getElementById("enemies-defeated");
@@ -48,16 +48,12 @@ const RENDER_PLAYER_ATTACK_POWER = document.getElementById("attackPower");
 const PLAYER_DEFAULT_ATTACK_POWER = 100;
 let playerAttackPower = PLAYER_DEFAULT_ATTACK_POWER; // Player attack damage
 
-// Player upgrades
-let upgradeMultiplier = 0;
-const FLAT_UPGRADE = 100;
-
 // ------------------- Gold variables --------------------------------------------------------
 // Display player gold
 const RENDER_PLAYER_GOLD = document.getElementById("gold-amount");
 
 // Gold default start and drop
-const PLAYER_DEFAULT_GOLD = 1000000;
+const PLAYER_DEFAULT_GOLD = 500;
 let playerGold = PLAYER_DEFAULT_GOLD;
 
 // Create Player object
@@ -69,9 +65,11 @@ RENDER_PLAYER_GOLD.innerHTML = player.gold;
 
 
 // ------------------- Menu variables --------------------------------------------------------
-// Upgrade menu button
-const UPGRADE_ATTACK_BUTTON = document.getElementById("upgrade-menu");
-// Reset menu button
+// Upgrade attack button
+const UPGRADE_ATTACK_BUTTON = document.getElementById("upgrade-button");
+// Upgrade attack 10X button
+const UPGRADE_ATTACK_10X_BUTTON = document.getElementById("upgrade-10x-button");
+// Reset button
 const RESET_GAME_BUTTON = document.getElementById("reset-menu");
 
 // ------------------- Enemy Images --------------------------------------------------------
@@ -261,9 +259,18 @@ function levelProgress() {
 // Upgrade Player attack
 const UPGRADE_PRICE_DEFAULT = 100;
 let upgradePrice = UPGRADE_PRICE_DEFAULT;
+let upgradePrice10X = upgradePrice * 10;
+
+// Player upgrades
+let upgradeMultiplier = 0;
+const FLAT_UPGRADE = 100;
+let upgrade10X = FLAT_UPGRADE * 10;
+
 // Price on upgrade menu
 const RENDER_UPGRADE_PRICE = document.getElementById("upgrade-price");
 RENDER_UPGRADE_PRICE.innerHTML = upgradePrice;
+const RENDER_UPGRADE_PRICE_10X = document.getElementById("upgrade-10x-price");
+RENDER_UPGRADE_PRICE_10X.innerHTML = upgradePrice10X;
 // Note: Increase Upgrade Price as player progress later.
 // Upgrade player attack function
 function upgradePlayerAttack() {
@@ -273,6 +280,19 @@ function upgradePlayerAttack() {
     } else {
         player.attackPower += FLAT_UPGRADE;
         player.gold -= upgradePrice;
+        showNotification("Attack Power Upgraded!")
+        RENDER_PLAYER_ATTACK_POWER.innerHTML = "Attack Power: " + player.attackPower;
+        RENDER_PLAYER_GOLD.innerHTML = player.gold;
+    }
+}
+
+function upgradePlayerAttack10X() {
+    // Notification when not enough gold
+    if (player.gold < upgradePrice10X) {
+        showNotification("You do not have enough gold!");
+    } else {
+        player.attackPower += upgrade10X;
+        player.gold -= upgradePrice10X;
         showNotification("Attack Power Upgraded!")
         RENDER_PLAYER_ATTACK_POWER.innerHTML = "Attack Power: " + player.attackPower;
         RENDER_PLAYER_GOLD.innerHTML = player.gold;
@@ -319,6 +339,9 @@ ENEMY_MODEL.addEventListener('click', attackEnemy);
 
 // Click function to upgrade player attack
 UPGRADE_ATTACK_BUTTON.addEventListener('click', upgradePlayerAttack);
+
+// Click function to upgrade player attack
+UPGRADE_ATTACK_10X_BUTTON.addEventListener('click', upgradePlayerAttack10X);
 
 // Click function to reset game
 RESET_GAME_BUTTON.addEventListener('click', resetGame);
