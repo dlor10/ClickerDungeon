@@ -2,11 +2,16 @@
 // Enemy object
 export class Enemy {
     // Enemy constructor
-    constructor(enemyMaxHealth, goldDrop) {
-        this.maxHealth = enemyMaxHealth;
-        this.currentHP = enemyMaxHealth;
-        this.goldDrop = goldDrop;
+    constructor() {
+        this.maxHealth = 0;
+        this.currentHP = 0;
+        this.goldDrop = 0;
         this.boss = false;
+    }
+    setEnemyStats(maxHealth, goldDrop) {
+        this.maxHealth = maxHealth;
+        this.currentHP = maxHealth;
+        this.goldDrop = goldDrop;
     }
     // Attacking enemy function
     takeDamage(damage) {

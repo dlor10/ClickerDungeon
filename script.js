@@ -15,8 +15,8 @@ let enemyHealthPercent;
 const ENEMY_GOLD_DROP_DEFAULT = 10;
 let enemyGoldDrop = ENEMY_GOLD_DROP_DEFAULT;
 // Increase rate of monster and gold per level
-const ENEMY_LEVEL_RATE = 1.50;
-const ENEMY_GOLD_DROP_INCREASE_RATE = 1.25;
+const ENEMY_LEVEL_RATE = 1.40;
+const ENEMY_GOLD_DROP_INCREASE_RATE = 1.20;
 
 // Boss HP default value
 const BOSS_ENEMY_DEFAULT_HEALTH = 10000;
@@ -24,18 +24,20 @@ let bossEnemyMaxHealth = BOSS_ENEMY_DEFAULT_HEALTH;
 // Boss gold drop default
 const BOSS_GOLD_DROP_DEFAULT = 1000;
 let bossEnemyGoldDrop = BOSS_GOLD_DROP_DEFAULT;
-const BOSS_LEVEL_RATE = 50;
-const BOSS_GOLD_DROP_INCREASE_RATE = 25;
+const BOSS_LEVEL_RATE = 40;
+const BOSS_GOLD_DROP_INCREASE_RATE = 20;
 
 // Display progression
 const RENDER_ENEMIES_DEFEATED = document.getElementById("enemies-defeated");
 let enemiesDefeatedCount = 0;
+let normalMonsterKill = 0;
 // Display enemies defeated count
 RENDER_ENEMIES_DEFEATED.innerHTML = "💀 " + enemiesDefeatedCount;
 
 const RENDER_STAGE_LEVEL = document.getElementById("stage-level");
 const DEFAULT_STAGE = 1;
 let stageLevel = DEFAULT_STAGE;
+// Display stage level
 RENDER_STAGE_LEVEL.innerHTML = stageLevel;
 
 // ------------------- Player variables --------------------------------------------------------
@@ -83,23 +85,31 @@ const MASTERING_IDLE = "/assets/mastering-idle.png";
 const MASTERING_IDLE_2 = "/assets/mastering-idle2.png";
 const MASTERING_DAMAGED = "/assets/mastering-damaged.png";
 
-let enemyIdleImage;
-let enemyIdleImage2;
-let enemyDamagedImage = PORING_DAMAGED;
+let enemyIdleImage = PORING_IDLE;
+let bossIdleImage = MASTERING_IDLE;
+let idleState = enemyIdleImage;
 
-let bossEnemyIdleImage = MASTERING_IDLE;
-let bossEnemyIdleImage2 = MASTERING_IDLE_2;
+let enemyDamagedImage = PORING_DAMAGED;
 let bossEnemyDamagedImage = MASTERING_DAMAGED;
+let damagedState;
 
 let enemyImage = document.getElementById("enemy-image");
 
-// ------------------- Game functions --------------------------------------------------------
+// ------------------- Functions --------------------------------------------------------
+// ------------------- Enemy Functions --------------------------------------------------------
+// Display enemy model
+function renderEnemyModel(idleImage) {
+    idleState = idleImage;
+    enemyImage.src = idleState;
+}
 // Spawn new enemy
-function spawnNewEnemyAndImage(image) {
-    enemyIdleImage = image;
+function spawnNewEnemy() {
     // Create Enemy object
-    enemy = new GameObjects.Enemy(enemyMaxHealth, enemyGoldDrop);
-    enemyImage.src = enemyIdleImage;
+    enemy = new GameObjects.Enemy();
+}
+// Set enemy HP and gold drop and display HP
+function displayEnemyHP(maxHealth, goldDrop) {
+    enemy.setEnemyStats(maxHealth, goldDrop);
     // Calculate percentage of enemy health remaining
     enemyHealthPercent = (enemy.currentHP / enemy.maxHealth) * 100;
     // Update enemy health bar
@@ -108,8 +118,6 @@ function spawnNewEnemyAndImage(image) {
     RENDER_ENEMY_HP.innerHTML = enemy.currentHP + " HP";
     ENEMY_CURRENT_HEALTH.style.backgroundColor = "rgb(5, 200, 5)";
 }
-
-spawnNewEnemyAndImage(PORING_IDLE);
 
 // handleEnemyHP
 function handleEnemyHP() {
@@ -132,11 +140,11 @@ function handleEnemyHP() {
 }
 
 // Enemy image when taking damage
-function enemyTakeDamage(image) {
-    enemyDamagedImage = image;
-    enemyImage.src = enemyDamagedImage;
+function enemyTakeDamage(damagedImage) {
+    damagedState = damagedImage;
+    enemyImage.src = damagedState;
     setTimeout(() => {
-        enemyImage.src = enemyIdleImage;
+        enemyImage.src = idleState;
     }, 400);
 }
 
@@ -151,30 +159,6 @@ function enemyDrop() {
     RENDER_ENEMIES_DEFEATED.innerHTML = "💀 " + enemiesDefeatedCount;
 }
 
-// Spawn new enemy
-function spawnNewBossEnemyAndImage(image) {
-    enemyIdleImage = image;
-    // Create Enemy object
-    enemy = new GameObjects.Enemy(bossEnemyMaxHealth, bossEnemyGoldDrop);
-    enemy.boss = true;
-    enemyImage.src = enemyIdleImage;
-    // Calculate percentage of enemy health remaining
-    enemyHealthPercent = (enemy.currentHP / enemy.maxHealth) * 100;
-    // Update enemy health bar
-    ENEMY_CURRENT_HEALTH.style.width = enemyHealthPercent + "%";
-    // Display enemy HP
-    RENDER_ENEMY_HP.innerHTML = enemy.currentHP + " HP";
-    ENEMY_CURRENT_HEALTH.style.backgroundColor = "rgb(5, 200, 5)";
-}
-
-// Enemy image when taking damage
-function bossEnemyTakeDamage(image) {
-    enemyImage.src = image;
-    setTimeout(() => {
-        enemyImage.src = bossEnemyIdleImage;
-    }, 400);
-}
-
 function bossEnemyDrop() {
     player.gold += enemy.goldDrop;
     // Level up enemy and gold drop
@@ -186,6 +170,7 @@ function bossEnemyDrop() {
     RENDER_ENEMIES_DEFEATED.innerHTML = "💀 " + enemiesDefeatedCount;
 }
 
+// ------------------- Notification functions --------------------------------------------------------
 // Element to display messages notifications
 const RENDER_NOTIFICATION = document.getElementById("notification");
 // Message notification function
@@ -201,7 +186,6 @@ function showNotification(message){
         RENDER_NOTIFICATION.style.display = "none";
     }, 1000);
 }
-
 
 // Displays damage when attacking
 function showDamageNotification(message) {
@@ -224,6 +208,7 @@ function showDamageNotification(message) {
     }, 800);
 }
 
+// ------------------- System functions --------------------------------------------------------
 // Attacking enemy function
 function attackEnemy() {
     enemy.takeDamage(player.attackPower);
@@ -232,11 +217,11 @@ function attackEnemy() {
 
     // Renders normal or boss damage image
     if (enemy.boss) {
-        enemyTakeDamage(MASTERING_DAMAGED);
+        enemyTakeDamage(bossEnemyDamagedImage);
     } else {
-        enemyTakeDamage(PORING_DAMAGED);
+        enemyTakeDamage(enemyDamagedImage);
     }
-
+    
     // Normal or boss enemy drops
     if (enemy.isDefeated()) {
         if (enemy.boss) {
@@ -244,14 +229,31 @@ function attackEnemy() {
         } else {
             enemyDrop();
         }
-
         // Spawn next enemy (normal or boss at 10th enemy)
-        if (enemiesDefeatedCount % 10 === 0) {
+        if (normalMonsterKill >= 9) {
+            renderEnemyModel(bossIdleImage);
+            spawnNewEnemy();
+            displayEnemyHP(bossEnemyMaxHealth, bossEnemyGoldDrop);
             enemy.boss = true;
-            spawnNewBossEnemyAndImage(MASTERING_IDLE);
+            normalMonsterKill = 0;
         } else {
-            spawnNewEnemyAndImage(PORING_IDLE);
+            renderEnemyModel(enemyIdleImage);
+            spawnNewEnemy();
+            displayEnemyHP(enemyMaxHealth, enemyGoldDrop);
+            enemy.boss = false;
+            normalMonsterKill += 1;
         }
+        levelProgress();
+    }
+}
+
+// Progress to next stage after 10 kills
+function levelProgress() {
+    if (enemiesDefeatedCount % 10 === 0) {
+        stageLevel += 1;
+        RENDER_STAGE_LEVEL.innerHTML = stageLevel;
+        enemyMaxHealth /= 2;
+        bossEnemyMaxHealth /= 2;
     }
 }
 
@@ -278,11 +280,10 @@ function upgradePlayerAttack() {
 }
 
 // Reset game
-function resetGame(){
+function resetGame() {
     // Reset all enemy values
     enemyMaxHealth = ENEMY_DEFAULT_HEALTH;
     enemyGoldDrop = ENEMY_GOLD_DROP_DEFAULT;
-    spawnNewEnemyAndImage(enemyIdleImage);
     // Reset all boss enemy values
     bossEnemyMaxHealth = BOSS_ENEMY_DEFAULT_HEALTH;
     bossEnemyGoldDrop = BOSS_GOLD_DROP_DEFAULT;
@@ -291,6 +292,12 @@ function resetGame(){
     playerGold = PLAYER_DEFAULT_GOLD;
     player = new GameObjects.Player(playerAttackPower, playerGold);
     enemiesDefeatedCount = 0;
+    normalMonsterKill = 0;
+    stageLevel = DEFAULT_STAGE;
+    // Reset model and HP bar
+    renderEnemyModel(idleState);
+    spawnNewEnemy();
+    displayEnemyHP(enemyMaxHealth, enemyGoldDrop);
     // Reset UI
     ENEMY_CURRENT_HEALTH.style.width = enemyHealthPercent + "%";
     ENEMY_CURRENT_HEALTH.style.backgroundColor = "rgb(5, 200, 5)";
@@ -298,9 +305,15 @@ function resetGame(){
     RENDER_PLAYER_ATTACK_POWER.innerHTML = "Attack Power: " + player.attackPower;
     RENDER_PLAYER_GOLD.innerHTML = player.gold;
     RENDER_ENEMIES_DEFEATED.innerHTML = "💀 " + enemiesDefeatedCount;
+    RENDER_STAGE_LEVEL.innerHTML = stageLevel;
 }
 
-// ----------------- Event Listeners ----------------------------------------------
+// ----------------- Game ----------------------------------------------
+// First enemy spawn
+renderEnemyModel(idleState);
+spawnNewEnemy();
+displayEnemyHP(enemyMaxHealth, enemyGoldDrop);
+
 // Click function to attack enemy
 ENEMY_MODEL.addEventListener('click', attackEnemy);
 

@@ -83,7 +83,7 @@ body{
 }
 
 #enemyContainer{
-    width: clamp(100px, 9dvw, 120px);
+    width: auto;
     height: auto;
     position: absolute;
     top: 30dvh;
