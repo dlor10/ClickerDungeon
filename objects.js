@@ -6,6 +6,7 @@ export class Enemy {
         this.maxHealth = enemyMaxHealth;
         this.currentHP = enemyMaxHealth;
         this.goldDrop = goldDrop;
+        this.boss = false;
     }
     // Attacking enemy function
     takeDamage(damage) {

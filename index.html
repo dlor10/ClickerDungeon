@@ -6,41 +6,44 @@
         <script type="module" src="script.js" defer></script>
     </head>
     <body>
-        <!-- Field container -->
-        <div id="field">
-            <!-- Player stats box -->
-            <div id="playerStats">
-                <div id="attackPower"></div>
-            </div>
-            <!-- Container for progression -->
-            <div id="progress-container">
-                <div id="stage-level"></div>
-                <div id="enemies-defeated"></div>
-            </div>
-            <div id="gold-container">
-                <!-- <img id="gold-icon" src="" alt=""> -->
-                <div id="gold-amount"></div>
-            </div>
-            <!-- Enemy container and hit box -->
-            <div id="enemyContainer" draggable="false">
-                <div id="enemy">
-                    <img id="enemy-image" alt="enemy" draggable="false">
+        <div id="game-container">
+            <!-- Field container -->
+            <div id="field">
+                <!-- Player stats box -->
+                <div id="playerStats">
+                    <div id="attackPower"></div>
                 </div>
-                <div id="enemyHealthPoints"></div>
-                <div id="enemyHealthBar"><div id="enemyCurrentHealth"></div></div>
-                
-                <div id="damage-messages-container"></div>
+                <!-- Container for progression -->
+                <div id="progress-container">
+                    <div id="stage-level"></div>
+                    <div id="enemies-defeated"></div>
+                </div>
+                <div id="gold-container">
+                    <img id="gold-icon" src="/assets/GoldCoin1.png" alt="gold">
+                    <div id="gold-amount"></div>
+                </div>
+                <!-- Enemy container and hit box -->
+                <div id="enemyContainer" draggable="false">
+                    <div id="enemy">
+                        <img id="enemy-image" alt="enemy" draggable="false">
+                    </div>
+                    <div id="enemyName"></div>
+                    <div id="enemyHealthPoints"></div>
+                    <div id="enemyHealthBar"><div id="enemyCurrentHealth"></div></div>
+                    
+                    <div id="damage-messages-container"></div>
+                </div>
+                <!-- Upgrade notifications -->
+                <div id="notification"></div>
             </div>
-            <!-- Upgrade notifications -->
-            <div id="notification"></div>
-        </div>
-        <div id="menu-container">
-            <button id="upgrade-menu" class="menus">
-                <h1>UPGRADE<br><span id="upgrade-price"></span></h1>
-            </button>
-            <button id="reset-menu" class="menus">
-                <h1>RESET</h1>
-            </button>
+            <div id="menu-container">
+                <button id="upgrade-menu" class="menus">
+                    <h1>UPGRADE<br><img id="menu-gold-icon" src="/assets/GoldCoin1.png" alt="gold"><span id="upgrade-price"></span></h1>
+                </button>
+                <button id="reset-menu" class="menus">
+                    <h1>RESET</h1>
+                </button>
+            </div>
         </div>
     </body>
 </html>
